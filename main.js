@@ -7,42 +7,27 @@ $("#submit").click(function(event){
     event.preventDefault();
     pin = $("#pincode").val();
     date =$("#date").val();
-    var pt1 = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode=";
-    var pt2 = "&date=";
-    var link = pt1+pin+pt2+date;
+    var link = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode="+pin+"&date="+date;
     console.log("your search link api : ")
     console.log(link);
 
-    $.get(link, {name:'link'}, function (data, textStatus, jqXHR) {
+    $.get(link, {name:'link'}, function (data) {
         // print data in table here
 
-        var len = data.centers.length;
+        var len = data.centers.length; 
         
         console.log(data.centers)
 
-        // Covishield data printing
-        var i = 0;
-        for(i = 0 ; i < len ; i++){
-            $('#id').append(JSON.stringify('<br>'+data.centers[i].center_id));
-            $('#name').append(JSON.stringify('<br>'+data.centers[i].name));
-            $('#fee').append(JSON.stringify('<br>'+data.centers[i].fee_type));
-            $('#addr').append(JSON.stringify('<br>'+data.centers[i].address));
-            $('#vaccine').append(JSON.stringify('<br>'+ data.centers[i].sessions[0].vaccine));
-            $('#dose1').append(JSON.stringify('<br>'+data.centers[i].sessions[0].available_capacity_dose1));
-            $('#dose2').append(JSON.stringify('<br>'+data.centers[i].sessions[0].available_capacity_dose2));
-        }
+        // displaying data printing
+       
 
-        // Covaxin data printing 
-        var j = 0;
-        for(j = 0 ; j < len ; j++){
-            $('#id').append(JSON.stringify('<br>'+data.centers[j].center_id));
-            $('#name').append(JSON.stringify('<br>'+data.centers[j].name));
-            $('#fee').append(JSON.stringify('<br>'+data.centers[j].fee_type));
-            $('#addr').append(JSON.stringify('<br>'+data.centers[j].address));
-            $('#vaccine').append(JSON.stringify('<br>'+ data.centers[j].sessions[1].vaccine));
-            $('#dose1').append(JSON.stringify('<br>'+data.centers[j].sessions[1].available_capacity_dose1));
-            $('#dose2').append(JSON.stringify('<br>'+data.centers[j].sessions[1].available_capacity_dose2));
+        for(let i=0;i<len;i++){
+            for(j = 0 ; j < data.centers[i].sessions.length ; j++){
+                document.getElementById("table").insertRow(-1).innerHTML = '<td>'+data.centers[i].center_id+'</td><td>'+data.centers[i].name+'</td><td>'+data.centers[i].fee_type+'</td><td>'+data.centers[i].address+'</td><td>'+data.centers[i].sessions[j].vaccine+'</td><td>'+data.centers[i].sessions[j].available_capacity_dose1+'</td><td>'+data.centers[i].sessions[j].available_capacity_dose2+'</td>';
+            }
+        
         }
+   
 
     });
     
